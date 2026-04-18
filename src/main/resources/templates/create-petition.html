@@ -8,6 +8,12 @@
 </head>
 <body>
 <main class="page page--narrow">
+    <nav class="page-nav">
+        <a class="nav-link" th:href="@{/petitions}">View All</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions/new}">Create Petition</a>
+        <a class="nav-link" th:href="@{/petitions/search}">Search Petitions</a>
+    </nav>
+
     <header class="page-header">
         <p class="eyebrow">Oleksandra's Petitions</p>
         <h1>Create Petition</h1>

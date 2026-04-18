@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.oleksandra.oleksandraspetitions.model.Petition;
@@ -40,6 +41,21 @@ public class PetitionController {
 	public String showCreatePetitionForm(Model model) {
 		model.addAttribute("petition", new Petition());
 		return "create-petition";
+	}
+
+	@GetMapping("/petitions/search")
+	public String showSearchPage(@RequestParam(name = "keyword", defaultValue = "") String keyword, Model model) {
+		model.addAttribute("keyword", keyword);
+		return "search";
+	}
+
+	@GetMapping("/petitions/search/results")
+	public String viewSearchResults(@RequestParam(name = "keyword", defaultValue = "") String keyword, Model model) {
+		String trimmedKeyword = keyword.trim();
+		model.addAttribute("keyword", trimmedKeyword);
+		model.addAttribute("keywordProvided", !trimmedKeyword.isEmpty());
+		model.addAttribute("petitions", petitionService.searchPetitions(trimmedKeyword));
+		return "search-results";
 	}
 
 	@PostMapping("/petitions")

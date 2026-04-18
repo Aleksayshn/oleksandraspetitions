@@ -4,11 +4,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class Petition {
 
 	private Long id;
+
+	@NotBlank(message = "Title is required")
 	private String title;
+
+	@NotBlank(message = "Description is required")
 	private String description;
+
+	@NotBlank(message = "Author name is required")
 	private String authorName;
 	private LocalDateTime createdAt;
 	private List<Signature> signatures = new ArrayList<>();

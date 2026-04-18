@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petition Details</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="page">
+    <header class="page-header page-header--split">
+        <div>
+            <p class="eyebrow">Oleksandra's Petitions</p>
+            <h1 th:text="${petition.title}">Petition title</h1>
+            <p class="intro">View the full petition details and add your signature if you support it.</p>
+        </div>
+        <a class="button-link button-link--secondary" th:href="@{/petitions}">Back to Petitions</a>
+    </header>
+
+    <section class="details-layout">
+        <article class="details-card">
+            <div class="petition-card__header">
+                <h2>Petition Details</h2>
+                <span class="signature-badge">
+                    <span th:text="${petition.signatureCount}">0</span>
+                    signatures
+                </span>
+            </div>
+
+            <p class="description description--full" th:text="${petition.description}">
+                Full petition description
+            </p>
+
+            <dl class="meta">
+                <div>
+                    <dt>Author</dt>
+                    <dd th:text="${petition.authorName}">Author name</dd>
+                </div>
+                <div>
+                    <dt>Created</dt>
+                    <dd th:text="${#temporals.format(petition.createdAt, 'dd MMM yyyy HH:mm')}">18 Apr 2026 09:00</dd>
+                </div>
+            </dl>
+        </article>
+
+        <section class="form-card">
+            <h2>Sign This Petition</h2>
+
+            <form th:action="@{/petitions/{id}/sign(id=${petition.id})}" th:object="${signature}" method="post"
+                  class="petition-form" novalidate>
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" th:field="*{name}"
+                           th:classappend="${#fields.hasErrors('name')} ? ' input-error'">
+                    <p class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" th:field="*{email}"
+                           th:classappend="${#fields.hasErrors('email')} ? ' input-error'">
+                    <p class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email error</p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="button-link">Sign Petition</button>
+                </div>
+            </form>
+        </section>
+    </section>
+
+    <section class="details-card">
+        <div class="petition-card__header">
+            <h2>Current Signatures</h2>
+            <span class="signature-badge">
+                <span th:text="${petition.signatureCount}">0</span>
+                total
+            </span>
+        </div>
+
+        <div class="empty-state empty-state--compact" th:if="${#lists.isEmpty(petition.signatures)}">
+            <h3>No signatures yet</h3>
+            <p>Be the first person to support this petition.</p>
+        </div>
+
+        <ul class="signature-list" th:if="${!#lists.isEmpty(petition.signatures)}">
+            <li class="signature-item" th:each="signature : ${petition.signatures}">
+                <div>
+                    <p class="signature-name" th:text="${signature.name}">Signer name</p>
+                    <p class="signature-email" th:text="${signature.email}">signer@example.com</p>
+                </div>
+                <p class="signature-date" th:text="${#temporals.format(signature.signedAt, 'dd MMM yyyy HH:mm')}">
+                    18 Apr 2026 09:00
+                </p>
+            </li>
+        </ul>
+    </section>
+</main>
+</body>
+</html>

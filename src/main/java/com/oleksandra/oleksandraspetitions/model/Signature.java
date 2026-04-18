@@ -2,9 +2,16 @@ package com.oleksandra.oleksandraspetitions.model;
 
 import java.time.LocalDateTime;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
 public class Signature {
 
+	@NotBlank(message = "Name is required")
 	private String name;
+
+	@NotBlank(message = "Email is required")
+	@Email(message = "Email must be valid")
 	private String email;
 	private LocalDateTime signedAt;
 

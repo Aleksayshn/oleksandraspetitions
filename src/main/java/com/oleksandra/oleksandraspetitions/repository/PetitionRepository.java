@@ -3,6 +3,7 @@ package com.oleksandra.oleksandraspetitions.repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import jakarta.annotation.PostConstruct;
 
@@ -63,6 +64,12 @@ public class PetitionRepository {
 		return List.copyOf(petitions);
 	}
 
+	public Optional<Petition> findById(Long id) {
+		return petitions.stream()
+				.filter(petition -> petition.getId().equals(id))
+				.findFirst();
+	}
+
 	public Petition save(Petition petition) {
 		Petition storedPetition = new Petition(
 				nextId++,
@@ -73,6 +80,18 @@ public class PetitionRepository {
 				petition.getSignatures());
 		petitions.add(storedPetition);
 		return storedPetition;
+	}
+
+	public Signature addSignature(Long petitionId, Signature signature) {
+		Petition petition = findById(petitionId)
+				.orElseThrow(() -> new IllegalArgumentException("Petition not found: " + petitionId));
+
+		Signature storedSignature = new Signature(
+				signature.getName(),
+				signature.getEmail(),
+				signature.getSignedAt());
+		petition.getSignatures().add(storedSignature);
+		return storedSignature;
 	}
 
 }

@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import jakarta.annotation.PostConstruct;
-
 import org.springframework.stereotype.Repository;
 
 import com.oleksandra.oleksandraspetitions.model.Petition;
@@ -18,8 +16,11 @@ public class PetitionRepository {
 	private final List<Petition> petitions = new ArrayList<>();
 	private long nextId = 1L;
 
-	@PostConstruct
-	void seedData() {
+	public PetitionRepository() {
+		seedData();
+	}
+
+	private void seedData() {
 		if (!petitions.isEmpty()) {
 			return;
 		}

@@ -9,9 +9,9 @@
 <body>
 <main class="page">
     <nav class="page-nav">
-        <a class="nav-link" th:href="@{/petitions}">View All</a>
+        <a class="nav-link" th:href="@{/petitions}">All Petitions</a>
         <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
-        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search Petitions</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search</a>
     </nav>
 
     <header class="page-header page-header--split">
@@ -54,7 +54,7 @@
                     </div>
                 </dl>
 
-                <p class="card-link">View details</p>
+                <p class="card-link">Open petition details</p>
             </a>
         </article>
     </section>
@@ -62,6 +62,10 @@
     <section class="empty-state" th:if="${#lists.isEmpty(petitions)}">
         <h2>No results found</h2>
         <p>No petitions matched your search. Try a different keyword.</p>
+        <div class="empty-state__actions">
+            <a class="button-link" th:href="@{/petitions/search}">Search Again</a>
+            <a class="button-link button-link--secondary" th:href="@{/petitions}">All Petitions</a>
+        </div>
     </section>
 </main>
 </body>

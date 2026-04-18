@@ -9,9 +9,9 @@
 <body>
 <main class="page">
     <nav class="page-nav">
-        <a class="nav-link" th:href="@{/petitions}">View All</a>
+        <a class="nav-link" th:href="@{/petitions}">All Petitions</a>
         <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
-        <a class="nav-link" th:href="@{/petitions/search}">Search Petitions</a>
+        <a class="nav-link" th:href="@{/petitions/search}">Search</a>
     </nav>
 
     <header class="page-header page-header--split">
@@ -86,7 +86,7 @@
 
         <div class="empty-state empty-state--compact" th:if="${#lists.isEmpty(petition.signatures)}">
             <h3>No signatures yet</h3>
-            <p>Be the first person to support this petition.</p>
+            <p>Be the first person to support this petition by using the sign form above.</p>
         </div>
 
         <ul class="signature-list" th:if="${!#lists.isEmpty(petition.signatures)}">

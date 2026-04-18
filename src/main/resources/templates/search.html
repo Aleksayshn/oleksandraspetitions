@@ -9,9 +9,9 @@
 <body>
 <main class="page page--narrow">
     <nav class="page-nav">
-        <a class="nav-link" th:href="@{/petitions}">View All</a>
+        <a class="nav-link" th:href="@{/petitions}">All Petitions</a>
         <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
-        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search Petitions</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search</a>
     </nav>
 
     <header class="page-header">
@@ -32,6 +32,14 @@
                 <button type="submit" class="button-link">Search</button>
             </div>
         </form>
+    </section>
+
+    <section class="empty-state empty-state--compact">
+        <h2>Need a starting point?</h2>
+        <p>Try searching for words like study, parking, or cafeteria, or browse all petitions first.</p>
+        <div class="empty-state__actions">
+            <a class="button-link button-link--secondary" th:href="@{/petitions}">All Petitions</a>
+        </div>
     </section>
 </main>
 </body>

@@ -9,9 +9,9 @@
 <body>
 <main class="page">
     <nav class="page-nav">
-        <a class="nav-link nav-link--active" th:href="@{/petitions}">View All</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions}">All Petitions</a>
         <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
-        <a class="nav-link" th:href="@{/petitions/search}">Search Petitions</a>
+        <a class="nav-link" th:href="@{/petitions/search}">Search</a>
     </nav>
 
     <header class="page-header page-header--split">
@@ -20,7 +20,10 @@
             <h1>All Petitions</h1>
             <p class="intro">Browse the current petitions and see how many people have already signed each one.</p>
         </div>
-        <a class="button-link" th:href="@{/petitions/new}">Create Petition</a>
+        <div class="header-actions">
+            <a class="button-link button-link--secondary" th:href="@{/petitions/search}">Search</a>
+            <a class="button-link" th:href="@{/petitions/new}">Create Petition</a>
+        </div>
     </header>
 
     <section class="petition-list" th:if="${!#lists.isEmpty(petitions)}">
@@ -49,14 +52,18 @@
                     </div>
                 </dl>
 
-                <p class="card-link">View details</p>
+                <p class="card-link">Open petition details</p>
             </a>
         </article>
     </section>
 
     <section class="empty-state" th:if="${#lists.isEmpty(petitions)}">
         <h2>No petitions available</h2>
-        <p>Seed data has not been loaded yet.</p>
+        <p>There are no petitions to browse yet. Create one to start the app flow.</p>
+        <div class="empty-state__actions">
+            <a class="button-link" th:href="@{/petitions/new}">Create Petition</a>
+            <a class="button-link button-link--secondary" th:href="@{/petitions/search}">Search</a>
+        </div>
     </section>
 </main>
 </body>

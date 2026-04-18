@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Petitions</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="page page--narrow">
+    <nav class="page-nav">
+        <a class="nav-link" th:href="@{/petitions}">All Petitions</a>
+        <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search</a>
+    </nav>
+
+    <header class="page-header">
+        <p class="eyebrow">Oleksandra's Petitions</p>
+        <h1>Search Petitions</h1>
+        <p class="intro">Search petitions by keyword in the title or description.</p>
+    </header>
+
+    <section class="form-card">
+        <form th:action="@{/petitions/search/results}" method="get" class="petition-form">
+            <div class="form-group">
+                <label for="keyword">Keyword</label>
+                <input id="keyword" type="text" name="keyword" th:value="${keyword}"
+                       placeholder="e.g. study, parking, cafeteria">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="button-link">Search</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="empty-state empty-state--compact">
+        <h2>Need a starting point?</h2>
+        <p>Try searching for words like study, parking, or cafeteria, or browse all petitions first.</p>
+        <div class="empty-state__actions">
+            <a class="button-link button-link--secondary" th:href="@{/petitions}">All Petitions</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>

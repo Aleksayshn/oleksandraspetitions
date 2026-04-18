@@ -11,8 +11,19 @@ body {
     padding: 2rem 1rem 3rem;
 }
 
+.page--narrow {
+    max-width: 760px;
+}
+
 .page-header {
     margin-bottom: 2rem;
+}
+
+.page-header--split {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
 }
 
 .eyebrow {
@@ -33,6 +44,26 @@ body {
     margin: 0;
     max-width: 40rem;
     color: #52606d;
+}
+
+.button-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    background: #1f2933;
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button-link--secondary {
+    background: #d9e2ec;
+    color: #1f2933;
 }
 
 .petition-list {
@@ -110,12 +141,75 @@ body {
     text-align: center;
 }
 
+.form-card {
+    background: #ffffff;
+    border: 1px solid #d9e2ec;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.petition-form {
+    display: grid;
+    gap: 1rem;
+}
+
+.form-group {
+    display: grid;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid #bcccdc;
+    border-radius: 8px;
+    font: inherit;
+    color: inherit;
+    background: #ffffff;
+}
+
+.form-group textarea {
+    resize: vertical;
+}
+
+.input-error {
+    border-color: #d64545;
+    background: #fff5f5;
+}
+
+.field-error {
+    margin: 0;
+    color: #b42318;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
 @media (max-width: 640px) {
+    .page-header--split,
     .petition-card__header {
         flex-direction: column;
     }
 
+    .button-link,
     .signature-badge {
         align-self: flex-start;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
     }
 }

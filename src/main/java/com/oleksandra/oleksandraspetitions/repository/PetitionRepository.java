@@ -15,6 +15,7 @@ import com.oleksandra.oleksandraspetitions.model.Signature;
 public class PetitionRepository {
 
 	private final List<Petition> petitions = new ArrayList<>();
+	private long nextId = 1L;
 
 	@PostConstruct
 	void seedData() {
@@ -51,10 +52,27 @@ public class PetitionRepository {
 				LocalDateTime.now().minusDays(2),
 				List.of(
 						new Signature("Aoife Nolan", "aoife.nolan@example.com", LocalDateTime.now().minusDays(1)))));
+
+		nextId = petitions.stream()
+				.mapToLong(Petition::getId)
+				.max()
+				.orElse(0L) + 1;
 	}
 
 	public List<Petition> findAll() {
 		return List.copyOf(petitions);
+	}
+
+	public Petition save(Petition petition) {
+		Petition storedPetition = new Petition(
+				nextId++,
+				petition.getTitle(),
+				petition.getDescription(),
+				petition.getAuthorName(),
+				petition.getCreatedAt(),
+				petition.getSignatures());
+		petitions.add(storedPetition);
+		return storedPetition;
 	}
 
 }

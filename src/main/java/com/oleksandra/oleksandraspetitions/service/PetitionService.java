@@ -1,5 +1,6 @@
 package com.oleksandra.oleksandraspetitions.service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 
@@ -21,6 +22,16 @@ public class PetitionService {
 		return petitionRepository.findAll().stream()
 				.sorted(Comparator.comparing(Petition::getCreatedAt).reversed())
 				.toList();
+	}
+
+	public Petition createPetition(Petition petition) {
+		Petition newPetition = new Petition();
+		newPetition.setTitle(petition.getTitle().trim());
+		newPetition.setDescription(petition.getDescription().trim());
+		newPetition.setAuthorName(petition.getAuthorName().trim());
+		newPetition.setCreatedAt(LocalDateTime.now());
+		newPetition.setSignatures(List.of());
+		return petitionRepository.save(newPetition);
 	}
 
 }

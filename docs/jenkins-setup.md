@@ -4,16 +4,17 @@ This guide keeps the CI/CD setup simple for the assignment.
 
 ## 1. Jenkins plugins to install
 
+This guide assumes Jenkins is installed directly on the Ubuntu EC2 host.
+For the host installation steps, see:
+
+- `docs/ubuntu-EC2.md`
+
 Install these plugins in Jenkins:
 
 - `Pipeline`
 - `Git`
 - `GitHub`
 - `Credentials Binding`
-
-Useful later for deployment:
-
-- `SSH Agent`
 
 ## 2. Create a Jenkins pipeline job
 
@@ -55,7 +56,9 @@ Before using webhooks:
    - Package
    - Archive WAR
    - Manual Approval
-   - Deploy Placeholder
+   - Build Docker Image
+   - Remove Old Container
+   - Run New Tomcat Container
 
 The WAR artifact should be archived from:
 
@@ -102,23 +105,19 @@ Simple options:
 
 For the assignment, manual testing first is acceptable while you are still setting up.
 
-## 6. Credentials needed later for EC2 deployment
+## 6. Credentials needed
 
-When you replace the deploy placeholder with a real EC2 deploy step, you will likely need:
+This Docker-based deployment usually needs fewer credentials:
 
 - Git credentials in Jenkins
   - only if the repository is private
-- EC2 SSH private key
-  - so Jenkins can connect to the EC2 server
-- EC2 host details
-  - public IP or DNS name
-- EC2 username
-  - often `ec2-user` or `ubuntu`
-- Tomcat deployment path
-  - for example the `webapps` folder
 
-Keep the credentials in Jenkins `Manage Credentials`.
-Do not hardcode keys, usernames, or server addresses in the `Jenkinsfile`.
+Because Jenkins and Docker run on the same EC2 VM, no separate EC2 SSH deployment credential is required for the pipeline itself.
+
+For the deployment-side setup, see:
+
+- `docs/ubuntu-EC2.md`
+- `docs/deploy-setup.md`
 
 ## 7. What the pipeline is doing
 
@@ -130,6 +129,6 @@ The current `Jenkinsfile` is simple on purpose:
 - packages the WAR file
 - archives the WAR artifact
 - waits for manual approval before deployment
-- shows a deploy placeholder for the future EC2 Tomcat step
-
-This is enough for the assignment now and can be extended later without changing the project structure.
+- builds a Tomcat Docker image containing the WAR
+- removes the old container if it exists
+- starts a new container on port `9090`

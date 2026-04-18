@@ -4,18 +4,34 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import com.oleksandra.oleksandraspetitions.model.Petition;
 import com.oleksandra.oleksandraspetitions.model.Signature;
+import com.oleksandra.oleksandraspetitions.repository.PetitionRepository;
 
-@SpringBootTest
 class PetitionServiceTests {
 
-	@Autowired
 	private PetitionService petitionService;
+
+	@BeforeEach
+	void setUp() {
+		PetitionRepository petitionRepository = new PetitionRepository();
+		petitionService = new PetitionService(petitionRepository);
+	}
+
+	@Test
+	void findAllPetitionsReturnsSeededPetitionsInNewestFirstOrder() {
+		List<Petition> petitions = petitionService.findAllPetitions();
+
+		assertThat(petitions).hasSize(3);
+		assertThat(petitions).extracting(Petition::getTitle)
+				.containsExactly(
+						"Provide More Bicycle Parking",
+						"Extend Cafeteria Vegetarian Options",
+						"Improve Campus Study Spaces");
+	}
 
 	@Test
 	void createPetitionAddsPetitionToList() {
@@ -71,6 +87,13 @@ class PetitionServiceTests {
 		List<Petition> searchResults = petitionService.searchPetitions("   ");
 
 		assertThat(searchResults).hasSameSizeAs(allPetitions);
+	}
+
+	@Test
+	void searchPetitionsWithUnknownKeywordReturnsNoMatches() {
+		List<Petition> searchResults = petitionService.searchPetitions("unknown keyword");
+
+		assertThat(searchResults).isEmpty();
 	}
 
 }

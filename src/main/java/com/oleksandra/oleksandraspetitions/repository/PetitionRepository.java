@@ -64,6 +64,18 @@ public class PetitionRepository {
 		return List.copyOf(petitions);
 	}
 
+	public List<Petition> search(String keyword) {
+		if (keyword == null || keyword.isBlank()) {
+			return findAll();
+		}
+
+		String normalizedKeyword = keyword.toLowerCase();
+		return petitions.stream()
+				.filter(petition -> containsIgnoreCase(petition.getTitle(), normalizedKeyword)
+						|| containsIgnoreCase(petition.getDescription(), normalizedKeyword))
+				.toList();
+	}
+
 	public Optional<Petition> findById(Long id) {
 		return petitions.stream()
 				.filter(petition -> petition.getId().equals(id))
@@ -92,6 +104,10 @@ public class PetitionRepository {
 				signature.getSignedAt());
 		petition.getSignatures().add(storedSignature);
 		return storedSignature;
+	}
+
+	private boolean containsIgnoreCase(String source, String keyword) {
+		return source != null && source.toLowerCase().contains(keyword);
 	}
 
 }

@@ -3,24 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Petitions</title>
+    <title>Search Results</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
 <main class="page">
     <nav class="page-nav">
-        <a class="nav-link nav-link--active" th:href="@{/petitions}">View All</a>
+        <a class="nav-link" th:href="@{/petitions}">View All</a>
         <a class="nav-link" th:href="@{/petitions/new}">Create Petition</a>
-        <a class="nav-link" th:href="@{/petitions/search}">Search Petitions</a>
+        <a class="nav-link nav-link--active" th:href="@{/petitions/search}">Search Petitions</a>
     </nav>
 
     <header class="page-header page-header--split">
         <div>
             <p class="eyebrow">Oleksandra's Petitions</p>
-            <h1>All Petitions</h1>
-            <p class="intro">Browse the current petitions and see how many people have already signed each one.</p>
+            <h1>Search Results</h1>
+            <p class="intro" th:if="${keywordProvided}">
+                Showing results for "<span th:text="${keyword}">keyword</span>".
+            </p>
+            <p class="intro" th:if="${!keywordProvided}">
+                No keyword was entered, so all petitions are shown.
+            </p>
         </div>
-        <a class="button-link" th:href="@{/petitions/new}">Create Petition</a>
+        <a class="button-link" th:href="@{/petitions/search}">New Search</a>
     </header>
 
     <section class="petition-list" th:if="${!#lists.isEmpty(petitions)}">
@@ -55,8 +60,8 @@
     </section>
 
     <section class="empty-state" th:if="${#lists.isEmpty(petitions)}">
-        <h2>No petitions available</h2>
-        <p>Seed data has not been loaded yet.</p>
+        <h2>No results found</h2>
+        <p>No petitions matched your search. Try a different keyword.</p>
     </section>
 </main>
 </body>

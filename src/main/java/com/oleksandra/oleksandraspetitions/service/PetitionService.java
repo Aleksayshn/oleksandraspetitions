@@ -26,6 +26,12 @@ public class PetitionService {
 				.toList();
 	}
 
+	public List<Petition> searchPetitions(String keyword) {
+		return petitionRepository.search(normalize(keyword)).stream()
+				.sorted(Comparator.comparing(Petition::getCreatedAt).reversed())
+				.toList();
+	}
+
 	public Optional<Petition> findPetitionById(Long id) {
 		return petitionRepository.findById(id);
 	}

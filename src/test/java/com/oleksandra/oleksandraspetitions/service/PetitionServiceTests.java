@@ -54,4 +54,23 @@ class PetitionServiceTests {
 				.isEqualTo("cian.walsh@example.com");
 	}
 
+	@Test
+	void searchPetitionsMatchesTitleAndDescriptionIgnoringCase() {
+		List<Petition> titleMatches = petitionService.searchPetitions("  STUDY  ");
+		List<Petition> descriptionMatches = petitionService.searchPetitions("sustainable");
+
+		assertThat(titleMatches).extracting(Petition::getTitle)
+				.contains("Improve Campus Study Spaces");
+		assertThat(descriptionMatches).extracting(Petition::getTitle)
+				.contains("Provide More Bicycle Parking");
+	}
+
+	@Test
+	void searchPetitionsWithEmptyKeywordReturnsAllPetitions() {
+		List<Petition> allPetitions = petitionService.findAllPetitions();
+		List<Petition> searchResults = petitionService.searchPetitions("   ");
+
+		assertThat(searchResults).hasSameSizeAs(allPetitions);
+	}
+
 }

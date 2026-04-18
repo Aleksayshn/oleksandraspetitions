@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Petitions</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<main class="page">
+    <header class="page-header">
+        <p class="eyebrow">Oleksandra's Petitions</p>
+        <h1>All Petitions</h1>
+        <p class="intro">Browse the current petitions and see how many people have already signed each one.</p>
+    </header>
+
+    <section class="petition-list" th:if="${!#lists.isEmpty(petitions)}">
+        <article class="petition-card" th:each="petition : ${petitions}">
+            <div class="petition-card__header">
+                <h2 th:text="${petition.title}">Petition title</h2>
+                <span class="signature-badge">
+                    <span th:text="${petition.signatureCount}">0</span>
+                    signatures
+                </span>
+            </div>
+
+            <p class="description" th:text="${petition.shortDescription}">
+                Petition description
+            </p>
+
+            <dl class="meta">
+                <div>
+                    <dt>Author</dt>
+                    <dd th:text="${petition.authorName}">Author name</dd>
+                </div>
+                <div>
+                    <dt>Created</dt>
+                    <dd th:text="${#temporals.format(petition.createdAt, 'dd MMM yyyy HH:mm')}">18 Apr 2026 09:00</dd>
+                </div>
+            </dl>
+        </article>
+    </section>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(petitions)}">
+        <h2>No petitions available</h2>
+        <p>Seed data has not been loaded yet.</p>
+    </section>
+</main>
+</body>
+</html>

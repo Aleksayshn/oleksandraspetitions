@@ -6,10 +6,17 @@ pipeline {
         CONTAINER_NAME = 'oleksandraspetitions-app'
         HOST_PORT = '9090'
         CONTAINER_PORT = '8080'
+
+        // // Maven JVM: Limit Maven memory to prevent Jenkins from crashing on t3.micro/small
+        MAVEN_OPTS = '-Xms128m -Xmx384m -XX:MaxMetaspaceSize=192m'
     }
 
     options {
         timestamps()
+        // Automatically stop old builds to save disk space
+        buildDiscarder(logRotator(numToKeepStr: '3'))
+        disableConcurrentBuilds()
+
     }
 
     stages {
@@ -19,24 +26,25 @@ pipeline {
             }
         }
 
+
         stage('Build') {
-            steps {
-                sh 'chmod +x mvnw'
-                sh './mvnw clean compile'
-            }
-        }
+                    steps {
+                        sh 'chmod +x mvnw'
+                        sh './mvnw clean compile'
+                    }
+                }
 
-        stage('Test') {
-            steps {
-                sh './mvnw test'
-            }
-        }
+                stage('Test') {
+                    steps {
+                        sh './mvnw test'
+                    }
+                }
 
-        stage('Package') {
-            steps {
-                sh './mvnw package -DskipTests'
-            }
-        }
+                stage('Package') {
+                    steps {
+                        sh './mvnw package -DskipTests'
+                    }
+                }
 
         stage('Archive WAR') {
             steps {
@@ -46,8 +54,7 @@ pipeline {
 
         stage('Manual Approval') {
             steps {
-                input message: 'Deploy the WAR application to the Tomcat Docker container on EC2?', ok: 'Deploy'
-            }
+            input message: 'Deploy to EC2?', ok: 'Deploy'            }
         }
 
         stage('Build Docker Image') {
@@ -56,24 +63,35 @@ pipeline {
             }
         }
 
-        stage('Remove Old Container') {
+        stage('Deploy') {
+             steps {
+                 sh 'docker rm -f ${CONTAINER_NAME} || true'
+                 sh '''
+                     docker run -d \
+                       --name ${CONTAINER_NAME} \
+                       --restart unless-stopped \
+                       --memory="384m" \
+                       --memory-swap="512m" \
+                       -e JAVA_OPTS="-Xms128m -Xmx256m -XX:MaxMetaspaceSize=128m" \
+                       -p ${HOST_PORT}:${CONTAINER_PORT} \
+                       ${DOCKER_IMAGE_NAME}:latest
+                 '''
+                 sh 'docker ps --filter "name=${CONTAINER_NAME}"'
+             }
+         }
+
+
+        stage('Cleanup Docker') {
             steps {
-                sh 'docker rm -f ${CONTAINER_NAME} || true'
+                sh 'docker image prune -af || true'
+                sh 'docker builder prune -af || true'
             }
         }
+    }
 
-        stage('Run New Tomcat Container') {
-            steps {
-                sh '''
-                    docker run -d \
-                      --name ${CONTAINER_NAME} \
-                      --restart unless-stopped \
-                      -p ${HOST_PORT}:${CONTAINER_PORT} \
-                      ${DOCKER_IMAGE_NAME}:latest
-                '''
-
-                sh 'docker ps --filter "name=${CONTAINER_NAME}"'
-            }
+    post {
+        always {
+            cleanWs()
         }
     }
 }

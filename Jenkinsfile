@@ -55,10 +55,11 @@ pipeline {
         stage('Manual Approval') {
             steps {
                 timeout(time: 10, unit: 'MINUTES') {
-                    input message: 'Deploy to EC2?', ok: 'Deploy', submitter: 'Oleksandra Tiankina'
+                    input message: 'Deploy to EC2?', ok: 'Deploy'
                 }
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t ${DOCKER_IMAGE_NAME}:latest .'

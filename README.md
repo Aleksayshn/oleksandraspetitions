@@ -1,99 +1,143 @@
-# oleksandraspetitions
+A simple Spring Boot petition platform built for a university DevOps assignment. The application allows users to create petitions, browse and search them, view petition details, and sign petitions. It is packaged as a WAR file and deployed through Jenkins as a Tomcat Docker container on AWS EC2.
 
-A simple Spring Boot web application for creating, viewing, and signing petitions.
+- Live Application: http://13.60.171.79:9090/oleksandraspetitions
 
-## Project Summary
+## Features
 
-This project is a university DevOps assignment. The application is intentionally simple:
+- Create a petition
+- View all petitions
+- Search petitions by keyword
+- View search results
+- View petition details
+- Sign a petition
+- Simple in-memory data storage for assignment/demo use
+
+## Tech Stack
 
 - Java 21
 - Spring Boot
 - Maven
 - Thymeleaf
-- WAR packaging for later deployment to external Tomcat
-- In-memory Java collections instead of a database
+- Jenkins
+- Docker
+- Tomcat
+- AWS EC2
+- GitHub
 
-The goal is to keep the code easy to explain in a report, demo, and CI/CD pipeline.
+## Architecture / Workflow
 
-## Current Features
+```text
+Developer -> GitHub -> Jenkins -> Build / Test / Package -> Docker Image -> Tomcat Container on EC2
+```
 
-### 1. View all petitions
+- Source code is pushed to GitHub.
+- Jenkins pulls the repository and runs the pipeline defined in Jenkinsfile.
+- Maven builds `target/oleksandraspetitions.war`.
+- Docker packages the WAR into a Tomcat-based image using Dockerfile.
+- Jenkins redeploys the Tomcat container on EC2.
+- The application is exposed on port `9090`.
 
-- `GET /petitions`
-- Shows seeded example petitions
-- Displays title, short description, author, created date, and signature count
+## Prerequisites
 
-### 2. Create a petition
+- Java 21
+- Git
+- Docker
+- Jenkins
+- Ubuntu EC2 VM for deployment
 
-- `GET /petitions/new`
-- `POST /petitions`
-- Validates title, description, and author name
-- Saves the new petition in memory
-
-### 3. View petition details and sign a petition
-
-- `GET /petitions/{id}`
-- `POST /petitions/{id}/sign`
-- Shows full petition details
-- Shows all current signatures
-- Validates signer name and email
-- Saves signatures in memory and updates the signature count
-
-## Project Structure
-
-The code follows a simple MVC structure:
-
-- `model` for domain classes
-- `repository` for in-memory data storage
-- `service` for application logic
-- `controller` for Spring MVC endpoints
-- `templates` for Thymeleaf views
-- `static/css` for minimal styling
-
-## In-Memory Data
-
-There is no database in this version.
-
-- Example petitions are seeded at application startup
-- New petitions are stored in memory
-- New signatures are stored in memory
-- Data resets when the application restarts
-
-## Run Locally
-
-Run tests:
+## Local Run
 
 ```bash
 ./mvnw test
-```
-
-Start the application:
-
-```bash
 ./mvnw spring-boot:run
 ```
 
-Open in the browser:
+Open:
 
 - `http://localhost:8080/`
 - `http://localhost:8080/petitions`
 
-## Build WAR File
+## Build
 
 ```bash
 ./mvnw clean package
 ```
 
-The generated file is:
+Generated artifact:
 
 - `target/oleksandraspetitions.war`
 
-## Notes
+## Docker Deployment Summary
 
-- No database
-- No REST API
-- No security
-- No Docker
-- No JavaScript framework
+The application is deployed as a Tomcat Docker container.
 
-This keeps the project focused on the assignment requirements and future DevOps automation steps.
+```bash
+docker build -t oleksandraspetitions-tomcat:latest .
+docker rm -f oleksandraspetitions-app || true
+docker run -d --name oleksandraspetitions-app --restart unless-stopped -p 9090:8080 oleksandraspetitions-tomcat:latest
+```
+
+Application URL:
+
+- `http://<EC2_PUBLIC_IP>:9090/oleksandraspetitions/`
+
+## Jenkins Pipeline Summary
+
+Pipeline stages:
+
+- Checkout
+- Build
+- Test
+- Package
+- Archive WAR
+- Manual approval
+- Build Docker image
+- Remove old container
+- Run new Tomcat container
+
+## AWS Deployment Summary
+
+- Jenkins is installed directly on the Ubuntu EC2 host.
+- Docker is installed on the same EC2 host.
+- Jenkins uses host shell commands to build and redeploy the application container.
+- The deployed application runs in a Tomcat container on port `9090`.
+
+## Project Structure
+
+```text
+oleksandraspetitions/
+├── Jenkinsfile
+├── Dockerfile
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/com/oleksandra/oleksandraspetitions/
+│   │   │   ├── controller/
+│   │   │   ├── model/
+│   │   │   ├── repository/
+│   │   │   ├── service/
+│   │   │   ├── OleksandraspetitionsApplication.java
+│   │   │   └── ServletInitializer.java
+│   │   └── resources/
+│   │       ├── static/
+│   │       └── templates/
+│   └── test/
+└── README.md
+```
+
+## Screenshots
+
+<img src="assets/images/home-page.png" alt="Home Page" width="250" />
+<img src="assets/images/petition-details.png" alt="Petition Details" width="250" />
+
+<img src="assets/images/manual-deploy.png" alt="Manual Deploy" width="250" />
+<img src="assets/images/jenkins-build.png" alt="Jenkins Build" width="250" />
+
+## Future Improvements
+
+- Add persistent database storage
+- Add user authentication and authorization
+- Add pagination for large petition lists
+- Improve validation and error handling
+- Add more automated tests
+- Add monitoring and logging for deployment

@@ -127,11 +127,11 @@ oleksandraspetitions/
 
 ## Screenshots
 
-<img src="assets/images/home-page.png" alt="Home Page" width="250" />
-<img src="assets/images/petition-details.png" alt="Petition Details" width="250" />
+<img src="assets/images/home-page.png" alt="Home Page" width="450" />
+<img src="assets/images/petition-details.png" alt="Petition Details" width="450" />
 
-<img src="assets/images/manual-deploy.png" alt="Manual Deploy" width="250" />
-<img src="assets/images/jenkins-build.png" alt="Jenkins Build" width="250" />
+<img src="assets/images/manual-deploy.png" alt="Manual Deploy" width="450" />
+<img src="assets/images/jenkins-build.png" alt="Jenkins Build" width="450" />
 
 ## Future Improvements
 

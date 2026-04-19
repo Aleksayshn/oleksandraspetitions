@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     environment {
         WAR_FILE = 'target/oleksandraspetitions.war'
         DOCKER_IMAGE_NAME = 'oleksandraspetitions-tomcat'

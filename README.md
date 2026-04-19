@@ -1,6 +1,6 @@
 A simple Spring Boot petition platform built for a university DevOps assignment. The application allows users to create petitions, browse and search them, view petition details, and sign petitions. It is packaged as a WAR file and deployed through Jenkins as a Tomcat Docker container on AWS EC2.
 
-- Live Application: http://13.53.39.55:9090/oleksandraspetitions
+- Live Application: http://13.51.197.125:9090/oleksandraspetitions
 
 ## Features
 
